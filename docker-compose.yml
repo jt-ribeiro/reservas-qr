@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reservas_qr
+    ports:
+      - "3306:3306"
