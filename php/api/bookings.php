@@ -6,11 +6,10 @@ header('Access-Control-Allow-Origin: *');
 
 $date = $_GET['date'] ?? date('Y-m-d');
 $stmt = $pdo->prepare(
-    'SELECT time_slot, ROUND(100 * SUM(checked) / COUNT(*), 0) AS ocupacao
+    'SELECT id, nome, email, telefone, data, time_slot, pessoas, checked
      FROM bookings
      WHERE data = ?
-     GROUP BY time_slot
-     ORDER BY time_slot'
+     ORDER BY time_slot, id'
 );
 $stmt->execute([$date]);
 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

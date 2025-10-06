@@ -1,5 +1,11 @@
 <?php
 require_once __DIR__ . '/../libs/database.php';
+require_once __DIR__ . '/../libs/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../libs/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../libs/PHPMailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
@@ -11,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $input = json_decode(file_get_contents('php://input'), true);
+
+error_log('RAW INPUT: ' . file_get_contents('php://input'));
+error_log('DECODED: ' . print_r($input, true));
 
 // validação super básica
 if (empty($input['nome']) || empty($input['email']) || empty($input['data']) || empty($input['time_slot']) || empty($input['pessoas'])) {
