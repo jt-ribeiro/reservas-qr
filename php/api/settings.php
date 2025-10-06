@@ -1,7 +1,15 @@
 <?php
 require_once __DIR__ . '/../libs/database.php';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, PATCH, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');   // typo corrigido
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -13,7 +21,6 @@ if ($method === 'GET') {
 
 if ($method === 'PATCH') {
     $input = json_decode(file_get_contents('php://input'), true);
-
     $name   = $input['restaurant_name'] ?? null;
     $max    = $input['max_capacity']    ?? null;
     $open   = $input['opening_time']    ?? null;
@@ -25,7 +32,6 @@ if ($method === 'PATCH') {
         echo json_encode(['error' => 'Campos obrigatórios']);
         exit;
     }
-
     try {
         $stmt = $pdo->prepare(
             'UPDATE settings
@@ -40,3 +46,7 @@ if ($method === 'PATCH') {
     }
     exit;
 }
+
+// método não previsto
+http_response_code(405);
+echo json_encode(['error' => 'Method not allowed']);
